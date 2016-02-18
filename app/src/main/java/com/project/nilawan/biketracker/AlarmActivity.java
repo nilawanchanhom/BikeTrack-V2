@@ -177,8 +177,6 @@ public class AlarmActivity extends Activity {
 
                 private void condition() {
 
-
-                    /**station1*/
                     if (al == 1)  {
                         TextView text1 = (TextView) findViewById(R.id.textView);
                         text1.setText("ON");
