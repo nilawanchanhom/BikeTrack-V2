@@ -1,53 +1,52 @@
 package com.project.nilawan.biketracker;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MapsActivity extends FragmentActivity {
 
-    double lat;
-    double lng;
+    private GoogleApiClient client;
+//    double lat;
+//    double lng;
     private Button Bback;
     private TextView text1;
     private TextView text2;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private Double la;
+    private Double ln;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        setUpMapIfNeeded();
-
-        Intent i = getIntent();
-        lat = i.getDoubleExtra("lat",lat);
-        lng = i.getDoubleExtra("lng",lng);
-
-        ///
-        float zoomLevel = (float) 18.0;
-        LatLng latlng = new LatLng(lat, lng);
-
-        MarkerOptions options = new MarkerOptions()
-                .position(latlng)
-                .title("Bike");
-        mMap.addMarker(options);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel));
-        ///
-
-        TextView text1 = (TextView) findViewById(R.id.textView3);
-        TextView text2 = (TextView) findViewById(R.id.textView4);
-        text1.setText(String.format("%.6f", lat));
-        text2.setText(String.format("%.6f", lng));
+//        setUpMapIfNeeded();
 
         Bback = (Button) findViewById(R.id.Bback);
         Bback.setOnClickListener(new View.OnClickListener() {
@@ -58,13 +57,127 @@ public class MapsActivity extends FragmentActivity {
             }
         });
 
+        process();
+
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
+    private void process() {
+
+        getLatLng();
+
+
     }
+
+    private void getLatLng() {
+        
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... voids) {
+                    OkHttpClient okHttpClient = new OkHttpClient();
+
+                    Request.Builder builder = new Request.Builder();
+                    Request request = builder.url("http://tr.ddnsthailand.com/echo.php").build();
+
+                    try {
+                        Response response = okHttpClient.newCall(request).execute();
+                        if (response.isSuccessful()) {
+                            return response.body().string();
+                        } else {
+                            return "Not Success - code : " + response.code();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return "Error - " + e.getMessage();
+                    }
+                }   //doInBackground
+
+                @Override
+                protected void onPostExecute(String string) {
+                    super.onPostExecute(string);
+
+
+                    try {
+
+                        JSONArray data = new JSONArray(string);
+                        final ArrayList<HashMap<String, String>> MyArrList = new ArrayList<HashMap<String, String>>();
+                        HashMap<String, String> map;
+
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject c = data.getJSONObject(i);
+                            map = new HashMap<>();
+                            map = new HashMap<String, String>();
+                            map.put("id", c.getString("id"));
+                            map.put("lat", c.getString("lat"));
+                            map.put("lng", c.getString("lng"));
+                            MyArrList.add(map);
+
+                        }
+                        String slat = MyArrList.get(0).get("lat");
+                        String slng = MyArrList.get(0).get("lng");
+                        double lat = Double.parseDouble(slat);
+                        double lng = Double.parseDouble(slng);
+
+                        la = lat;
+                        ln = lng;
+
+                        condition();
+
+
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+
+                }   //onPostExecute
+
+                private void condition() {
+
+                    setUpMapIfNeeded();
+
+                    float zoomLevel = (float) 18.0;
+                    LatLng latlng = new LatLng(la, ln);
+
+                    MarkerOptions options = new MarkerOptions()
+                            .position(latlng)
+                            .title("Bike");
+                    mMap.addMarker(options);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel));
+                    ///
+
+                    TextView text1 = (TextView) findViewById(R.id.textView3);
+                    TextView text2 = (TextView) findViewById(R.id.textView4);
+                    text1.setText(String.format("%.6f", la));
+                    text2.setText(String.format("%.6f", ln));
+
+
+                    Loop();
+
+                }   //condition
+
+
+            }.execute();
+
+        
+    }
+
+    private void Loop() {
+
+        android.os.Handler h = new android.os.Handler();
+        h.postDelayed(new Runnable() {
+            public void run() {
+                getLatLng();
+            }
+        }, 4000);
+
+    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        setUpMapIfNeeded();
+//    }
 
     public void onZoom(View view)
     {
@@ -122,8 +235,48 @@ public class MapsActivity extends FragmentActivity {
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
-    protected void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));
+      protected void setUpMap() {
+        mMap.addMarker(new MarkerOptions().position(new LatLng(la, ln)).title("Marker"));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Showlocation Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.project.nilawan.biketracker/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Showlocation Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.project.nilawan.biketracker/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 
 }

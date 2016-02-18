@@ -326,4 +326,6 @@ public class NotificationSet extends Activity {
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
+
 }
