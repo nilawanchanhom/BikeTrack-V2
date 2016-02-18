@@ -152,7 +152,7 @@ public class NotificationSet extends Activity {
             public void run() {
                 Receivesys();
             }
-        }, 20000);
+        }, 4000);
 
     }
 

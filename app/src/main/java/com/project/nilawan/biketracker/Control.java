@@ -23,9 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Nilawan on 18/2/2559.
- */
 public class Control extends Activity {
 
     private GoogleApiClient client;
@@ -195,7 +192,7 @@ public class Control extends Activity {
             public void run() {
                 Receivemotion();
             }
-        }, 20000);
+        }, 4000);
 
     }
 
