@@ -1,10 +1,17 @@
 package com.project.nilawan.biketracker;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.Button;
 
@@ -58,7 +65,7 @@ public class Control extends Activity {
                 Intent al = new Intent(Control.this,AlarmActivity.class);
                 finish();
                 startActivity(al);
-                onStop();
+
             }
         });
 
@@ -166,6 +173,7 @@ public class Control extends Activity {
                     if (mo == 1)  {
                         Button alarmOn = (Button)findViewById(R.id.statusbike);
                         alarmOn.setBackgroundResource(R.drawable.checkbike);
+                        showNotification();
                     }
 
                     else if (mo == 0)  {
@@ -182,6 +190,41 @@ public class Control extends Activity {
             }.execute();
 
         }
+
+    }
+
+    private void showNotification() {
+
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(Control.this);
+
+        notification.setSmallIcon(R.drawable.red);
+        notification.setTicker("New notification!!!");
+        notification.setWhen(System.currentTimeMillis());
+        notification.setContentTitle("This is a new notification!!");
+        notification.setContentText("Please check your bike!");
+        notification.setAutoCancel(true);
+
+
+        Uri sound = RingtoneManager.getDefaultUri(android.app.Notification.DEFAULT_SOUND);
+        notification.setSound(sound);
+
+        Bitmap picture = BitmapFactory.decodeResource(getResources(), R.drawable.red);
+        notification.setLargeIcon(picture);
+
+        PendingIntent myPendingIntent;
+        Intent myIntent = new Intent();
+        Context myContext = getApplicationContext();
+
+        myIntent.setClass(myContext, Control.class);
+        myIntent.putExtra("ID",1);
+
+        myPendingIntent = PendingIntent.getActivities(myContext, 0, new Intent[]{myIntent}, 0);
+        notification.setContentIntent(myPendingIntent);
+
+        android.app.Notification n = notification.build();
+        NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        nm.notify(1,n);
+
 
     }
 
