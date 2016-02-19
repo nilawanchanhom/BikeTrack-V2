@@ -158,7 +158,9 @@ public class AfterClickActivity extends Activity {
                         mo = motion;
 
 
-                        condition();
+                        if (!statusABoolean){
+                            condition();
+                        }
 
 
                     } catch (JSONException e) {
@@ -191,6 +193,8 @@ public class AfterClickActivity extends Activity {
 
                             Intent intent = new Intent(AfterClickActivity.this,Control.class);
                             startActivity(intent);
+
+                            finish();
                             //showNotification();
                         }
                     }
