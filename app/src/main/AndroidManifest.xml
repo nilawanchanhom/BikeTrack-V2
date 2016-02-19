@@ -34,14 +34,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MapsActivity"
-            android:label="@string/app_name"/>
-        <activity android:name=".Control"
-            android:label="@string/app_name"/>
-        <activity android:name=".AlarmActivity"
-            android:label="@string/app_name"/>
-        <activity android:name=".NotificationSet"
-            android:label="@string/app_name"/>
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".Control"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".AlarmActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".NotificationSet"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".AfterClickActivity"
+            android:label="@string/title_activity_after_click" >
+        </activity>
     </application>
 
 </manifest>

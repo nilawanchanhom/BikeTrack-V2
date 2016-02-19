@@ -8,4 +8,8 @@
     <string name="password_title">Password</string>
     <string name="password_confirm_title">Confirm Password</string>
     <string name="button_login">Login</string>
+    <string name="title_activity_after_click">AfterClickActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
