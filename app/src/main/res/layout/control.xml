@@ -19,7 +19,7 @@
             android:layout_centerHorizontal="true"
             android:padding="10dp"
             android:background="@drawable/currentlocation"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp" />
@@ -61,7 +61,7 @@
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Back"
             android:id="@+id/Block"
@@ -72,18 +72,19 @@
             android:layout_weight="1" />
 
         <Button
-            android:layout_width="249dp"
+            android:layout_width="0dp"
             android:layout_height="69dp"
             android:id="@+id/statusbike"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3" />
 
 
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="LogOut"
             android:id="@+id/Blogout"
