@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
@@ -13,53 +13,74 @@
         android:text="Back"
         android:id="@+id/Bback2"
         android:onClick="changeType"
-        android:textSize="12dp" />
+        android:textSize="12dp"
+        android:layout_alignParentTop="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Status Alarm"
-        android:id="@+id/textView2"
-        android:layout_gravity="center_horizontal" />
+        android:layout_below="@+id/Bback2"
+        android:layout_gravity="center"
+        android:id="@+id/lin">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/Bback2"
-        android:layout_marginBottom="10dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Status Alarm"
+            android:id="@+id/textView2"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/Bback2"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
 
 
     <Button
-        android:layout_width="296dp"
-        android:layout_height="274dp"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
         android:id="@+id/button_status"
         style="?android:attr/borderlessButtonStyle"
         android:background="@drawable/algreen"
-        android:layout_below="@+id/button_green"
+        android:layout_below="@+id/lin"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_above="@+id/lin2" />
 
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Balarmon"
-        android:layout_above="@+id/Balarmon"
-        android:background="@drawable/alarmon" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/Balarmoff"
+        android:id="@+id/lin2"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/alarmoff" />
+        android:layout_marginBottom="5dp">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Balarmon"
+            android:background="@drawable/alarmon"
+            android:layout_below="@+id/button_status" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Balarmoff"
+            android:layout_alignParentBottom="false"
+            android:background="@drawable/alarmoff"
+            android:layout_below="@+id/Balarmon" />
+    </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
